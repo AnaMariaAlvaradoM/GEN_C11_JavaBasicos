@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Java · Sesión 3 — Variables & Tipos de Datos</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --cream: #FAF8F4; --ink: #131820; --warm-mid: #6A7A82;
+    --accent: #1E6B72; --accent-light: #E4F2F3; --accent-bright: #3AABB4;
+    --subtle: #D8E6E8; --code-bg: #EBF3F4; --green: #2E7A44; --red: #B04040;
+  }
+  body {
+    font-family: 'DM Sans', sans-serif; background: #0F1E20;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 40px 20px; gap: 32px; min-height: 100vh;
+  }
+  .slide {
+    width: 1100px; height: 618px; background: var(--cream);
+    position: relative; overflow: hidden; display: flex; flex-direction: column;
+    border-radius: 4px; box-shadow: 0 8px 40px rgba(0,0,0,0.45); flex-shrink: 0;
+  }
+  .slide-num { position: absolute; bottom: 22px; right: 32px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--warm-mid); letter-spacing: 0.08em; }
+  .footer-line { position: absolute; bottom: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--accent), var(--accent-bright)); }
+  .slabel { font-family: 'DM Mono', monospace; font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 28px; }
+  .nav { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; max-width: 1100px; }
+  .nav a { font-family: 'DM Mono', monospace; font-size: 11px; color: #5A8A90; text-decoration: none; padding: 6px 14px; background: #182830; border-radius: 3px; letter-spacing: 0.06em; transition: all 0.15s; }
+  .nav a:hover { background: var(--accent); color: white; }
+  .kw { color: #7FBBDE; } .cls { color: #C5A87D; } .fn { color: #88C9A1; } .str { color: #F2A97C; } .num { color: #A8D8A0; } .cmt { color: #4A6A70; font-style: italic; }
+
+  /* S1 */
+  .s1 { background: var(--ink); justify-content: center; align-items: flex-start; padding: 64px 72px; }
+  .s1 .eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent-bright); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 28px; }
+  .s1 h1 { font-family: 'DM Serif Display', serif; font-size: 76px; line-height: 1; color: var(--cream); }
+  .s1 h1 em { color: var(--accent-bright); font-style: normal; }
+  .s1 .sub { font-size: 17px; color: var(--warm-mid); font-weight: 300; margin-top: 22px; max-width: 560px; line-height: 1.55; }
+  .s1 .qbox { position: absolute; bottom: 50px; left: 72px; right: 72px; border-left: 2px solid var(--accent-bright); padding-left: 20px; }
+  .s1 .qbox p { font-size: 14px; color: #7AAAB0; font-style: italic; line-height: 1.55; }
+  .s1 .qbox strong { color: var(--cream); font-style: normal; }
+  .s1 .deco { position: absolute; right: 60px; top: 50%; transform: translateY(-50%); font-family: 'DM Mono', monospace; font-size: 160px; color: rgba(58,171,180,0.05); line-height: 1; user-select: none; }
+  .s1 .footer-line { background: linear-gradient(90deg, var(--accent), var(--accent-bright)); }
+  .s1 .slide-num { color: #1E3A40; }
+
+  /* S2 */
+  .s2 { padding: 52px 72px; }
+  .s2 .rule { width: 40px; height: 2px; background: var(--accent); margin-bottom: 26px; }
+  .s2 .list { display: flex; flex-direction: column; gap: 22px; }
+  .s2 .item { display: flex; gap: 22px; align-items: flex-start; }
+  .s2 .num { font-family: 'DM Mono', monospace; font-size: 30px; color: var(--subtle); line-height: 1; flex-shrink: 0; margin-top: -2px; }
+  .s2 .txt { font-size: 15.5px; color: var(--ink); line-height: 1.55; }
+  .s2 .txt strong { color: var(--accent); font-weight: 500; }
+  .s2 .meta { position: absolute; top: 52px; right: 72px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--warm-mid); text-align: right; line-height: 1.7; }
+
+  /* S3 */
+  .s3 { padding: 46px 72px; }
+  .s3 .rules-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 4px; }
+  .s3 .rc { background: var(--code-bg); border-radius: 4px; padding: 16px 18px; border-left: 2px solid var(--subtle); }
+  .s3 .rc.hi { border-left-color: var(--accent); background: var(--accent-light); }
+  .s3 .rc-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+  .s3 .row { display: flex; gap: 10px; align-items: baseline; margin-bottom: 5px; flex-wrap: wrap; }
+  .s3 .ok { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--green); }
+  .s3 .no { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--red); text-decoration: line-through; }
+  .s3 .why { font-size: 11.5px; color: var(--warm-mid); }
+
+  /* S4 */
+  .s4 { padding: 46px 72px; }
+  .s4 .out-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 4px; margin-bottom: 16px; }
+  .s4 .oc { background: var(--ink); border-radius: 4px; padding: 18px 22px; }
+  .s4 .oc-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 12px; color: var(--accent-bright); }
+  .s4 pre { font-family: 'DM Mono', monospace; font-size: 12.5px; line-height: 1.75; color: #D4CFC8; }
+  .s4 .note { background: var(--code-bg); border-left: 2px solid var(--accent); border-radius: 0 3px 3px 0; padding: 12px 18px; font-size: 13px; color: var(--warm-mid); line-height: 1.5; }
+  .s4 .note strong { color: var(--ink); font-weight: 500; }
+
+  /* S5 */
+  .s5 { padding: 44px 72px; }
+  .s5 table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+  .s5 thead th { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--warm-mid); padding: 0 0 12px; text-align: left; border-bottom: 1px solid var(--subtle); }
+  .s5 tbody tr { border-bottom: 1px solid var(--subtle); }
+  .s5 tbody tr:last-child { border-bottom: none; }
+  .s5 tbody td { padding: 8px 0; font-size: 13px; vertical-align: middle; }
+  .s5 .td-type { font-family: 'DM Mono', monospace; color: var(--accent); font-weight: 500; width: 75px; }
+  .s5 .td-bits { font-family: 'DM Mono', monospace; color: var(--warm-mid); font-size: 12px; width: 50px; }
+  .s5 .td-ex { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--ink); width: 230px; }
+  .s5 .td-note { font-size: 12px; color: var(--warm-mid); }
+  .s5 .hi td { background: var(--accent-light); }
+
+  /* S6 */
+  .s6 { padding: 44px 72px; }
+  .s6 .split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 4px; margin-bottom: 14px; }
+  .s6 .cb { background: var(--ink); border-radius: 4px; padding: 18px 22px; }
+  .s6 .cl { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 12px; color: var(--accent-bright); }
+  .s6 pre { font-family: 'DM Mono', monospace; font-size: 12.5px; line-height: 1.75; color: #D4CFC8; }
+  .s6 .spec-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+  .s6 .spec { background: var(--code-bg); border-radius: 3px; padding: 10px 12px; text-align: center; }
+  .s6 .spec-sym { font-family: 'DM Mono', monospace; font-size: 14px; color: var(--accent); font-weight: 500; margin-bottom: 4px; }
+  .s6 .spec-desc { font-size: 11.5px; color: var(--warm-mid); }
+
+  /* S7 */
+  .s7 { padding: 44px 72px; }
+  .s7 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 4px; margin-bottom: 14px; }
+  .s7 .cb { background: var(--ink); border-radius: 4px; padding: 18px 22px; }
+  .s7 .cl { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 12px; }
+  .s7 .cl.var-l { color: var(--accent-bright); }
+  .s7 .cl.con-l { color: #C5A87D; }
+  .s7 pre { font-family: 'DM Mono', monospace; font-size: 12.5px; line-height: 1.75; color: #D4CFC8; }
+  .s7 .note { background: var(--code-bg); border-left: 2px solid var(--accent); border-radius: 0 3px 3px 0; padding: 12px 18px; font-size: 13px; color: var(--warm-mid); line-height: 1.5; }
+  .s7 .note strong { color: var(--ink); font-weight: 500; }
+
+  /* S8 */
+  .s8 { background: #0E1C20; padding: 48px 72px; }
+  .s8 .tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-bright); margin-bottom: 16px; }
+  .s8 h2 { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--cream); margin-bottom: 20px; line-height: 1.2; }
+  .s8 .scan-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .s8 .sb { background: #162428; border-radius: 4px; padding: 16px 18px; }
+  .s8 .sb-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 10px; color: var(--accent-bright); }
+  .s8 .sb-label.warn { color: #E09040; }
+  .s8 pre { font-family: 'DM Mono', monospace; font-size: 12px; line-height: 1.75; color: #C4CFC4; }
+  .s8 .warn-box { font-size: 12.5px; color: #B07030; line-height: 1.5; margin-bottom: 10px; }
+  .s8 .warn-box code { font-family: 'DM Mono', monospace; font-size: 11.5px; color: #E09040; background: rgba(224,144,64,0.1); padding: 1px 5px; border-radius: 2px; }
+  .s8 .footer-line { background: linear-gradient(90deg, var(--accent), var(--accent-bright)); }
+  .s8 .slide-num { color: #1E3A40; }
+
+  /* S9 */
+  .s9 { background: #0E1C20; padding: 48px 72px; }
+  .s9 .tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-bright); margin-bottom: 16px; }
+  .s9 h2 { font-family: 'DM Serif Display', serif; font-size: 26px; color: var(--cream); margin-bottom: 22px; line-height: 1.2; }
+  .s9 .steps { display: flex; flex-direction: column; }
+  .s9 .step { display: flex; align-items: flex-start; gap: 18px; padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,0.055); }
+  .s9 .step:last-child { border-bottom: none; }
+  .s9 .st { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--accent-bright); flex-shrink: 0; width: 52px; margin-top: 2px; }
+  .s9 .stxt { font-size: 13.5px; color: #B4C4C8; line-height: 1.5; }
+  .s9 .stxt code { font-family: 'DM Mono', monospace; font-size: 12.5px; color: var(--accent-bright); background: rgba(58,171,180,0.1); padding: 1px 6px; border-radius: 2px; }
+  .s9 .footer-line { background: linear-gradient(90deg, var(--accent), var(--accent-bright)); }
+  .s9 .slide-num { color: #1E3A40; }
+
+  /* S10 */
+  .s10 { padding: 46px 72px; }
+  .s10 .qb { margin-bottom: 22px; }
+  .s10 .qn { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--warm-mid); letter-spacing: 0.12em; margin-bottom: 8px; }
+  .s10 .qt { font-size: 14.5px; font-weight: 500; color: var(--ink); margin-bottom: 11px; line-height: 1.4; }
+  .s10 .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .s10 .opt { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--warm-mid); background: var(--code-bg); padding: 8px 12px; border-radius: 3px; line-height: 1.4; }
+  .s10 .opt.ok { background: rgba(30,107,114,0.1); color: var(--accent); border: 1px solid rgba(30,107,114,0.25); }
+
+  /* S11 */
+  .s11 { background: var(--ink); padding: 64px 72px; justify-content: center; }
+  .s11 .tag { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent-bright); margin-bottom: 26px; }
+  .s11 h2 { font-family: 'DM Serif Display', serif; font-size: 38px; color: var(--cream); line-height: 1.25; max-width: 580px; margin-bottom: 28px; }
+  .s11 h2 em { color: var(--accent-bright); font-style: normal; }
+  .s11 .sum { display: flex; flex-direction: column; gap: 12px; }
+  .s11 .si { display: flex; gap: 14px; align-items: flex-start; }
+  .s11 .sd { width: 5px; height: 5px; border-radius: 50%; background: var(--accent-bright); flex-shrink: 0; margin-top: 8px; }
+  .s11 .st { font-size: 14.5px; color: #6A8A90; line-height: 1.5; }
+  .s11 .st strong { color: #C4BDB5; font-weight: 400; }
+  .s11 .puente { position: absolute; bottom: 40px; left: 72px; right: 72px; border-top: 1px solid rgba(255,255,255,0.07); padding-top: 17px; }
+  .s11 .puente p { font-size: 13px; color: #1E3A40; font-style: italic; line-height: 1.5; }
+  .s11 .footer-line { background: linear-gradient(90deg, var(--accent), var(--accent-bright)); }
+  .s11 .slide-num { color: #1E3A40; }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="#s1">01 Apertura</a><a href="#s2">02 Objetivos</a><a href="#s3">03 Reglas</a>
+  <a href="#s4">04 Output</a><a href="#s5">05 Primitivos</a><a href="#s6">06 String & format</a>
+  <a href="#s7">07 var & final</a><a href="#s8">08 Scanner</a><a href="#s9">09 Actividad</a>
+  <a href="#s10">10 Quiz</a><a href="#s11">11 Cierre</a>
+</nav>
+
+<!-- 01 -->
+<div class="slide s1" id="s1">
+  <div class="eyebrow">Generation Colombia · Backend Bootcamp · Sesión 3</div>
+  <h1>Variables<br>& <em>Tipos</em><br>de Datos.</h1>
+  <div class="sub">Hoy escriben Java de verdad: declaran, imprimen, leen del usuario y construyen respuestas personalizadas.</div>
+  <div class="qbox">
+    <p><strong>Pregunta de apertura —</strong> Si tuvieras que guardar el nombre, la edad y el saldo de un usuario en tu programa — ¿qué tipo de dato usarías para cada uno? ¿Por qué no el mismo para los tres?</p>
+  </div>
+  <div class="deco">{ }</div>
+  <div class="footer-line"></div><div class="slide-num">01 / 11</div>
+</div>
+
+<!-- 02 -->
+<div class="slide s2" id="s2">
+  <div class="rule"></div>
+  <div class="slabel">Objetivos de la sesión</div>
+  <div class="list">
+    <div class="item"><div class="num">01</div><div class="txt">Aplicar las <strong>reglas de escritura de Java</strong> — convenciones de nombres, sensibilidad a mayúsculas y estructura mínima de un programa.</div></div>
+    <div class="item"><div class="num">02</div><div class="txt">Declarar variables con los <strong>8 tipos primitivos</strong>, con <code style="font-family:'DM Mono',monospace;font-size:13px">String</code>, con <code style="font-family:'DM Mono',monospace;font-size:13px">var</code> y con <code style="font-family:'DM Mono',monospace;font-size:13px">final</code>. Producir <strong>salida formateada</strong> con <code style="font-family:'DM Mono',monospace;font-size:13px">String.format</code> y <code style="font-family:'DM Mono',monospace;font-size:13px">printf</code>.</div></div>
+    <div class="item"><div class="num">03</div><div class="txt">Leer <strong>input del usuario con Scanner</strong>, manejar la trampa del buffer y producir una respuesta personalizada completa.</div></div>
+  </div>
+  <div class="meta">60 min · Live Code desde cero<br>TIFC2DEV-JAVA-CJ6</div>
+  <div class="footer-line"></div><div class="slide-num">02 / 11</div>
+</div>
+
+<!-- 03 -->
+<div class="slide s3" id="s3">
+  <div class="slabel">Reglas de escritura en Java</div>
+  <div class="rules-grid">
+    <div class="rc hi">
+      <div class="rc-title">Variables y métodos — camelCase</div>
+      <div class="row"><span class="ok">nombreUsuario</span><span class="why">primera en minúscula, resto capitalizadas</span></div>
+      <div class="row"><span class="ok">calcularTotal()</span><span class="why">mismo para métodos</span></div>
+      <div class="row"><span class="no">NombreUsuario</span><span class="why">eso es para clases</span></div>
+      <div class="row"><span class="no">nombre_usuario</span><span class="why">snake_case no es convención Java</span></div>
+    </div>
+    <div class="rc hi">
+      <div class="rc-title">Clases — PascalCase</div>
+      <div class="row"><span class="ok">VariablesDemo</span><span class="why">cada palabra capitalizada</span></div>
+      <div class="row"><span class="ok">StudentRegistry</span></div>
+      <div class="row"><span class="no">variablesDemo</span><span class="why">eso es camelCase — para variables</span></div>
+      <div style="margin-top:10px;font-size:12px;color:var(--accent);font-family:'DM Mono',monospace;">El nombre del archivo debe coincidir exactamente con el nombre de la clase pública.</div>
+    </div>
+    <div class="rc">
+      <div class="rc-title">Constantes — SCREAMING_SNAKE_CASE</div>
+      <div class="row"><span class="ok">MAX_INTENTOS</span><span class="why">todo mayúsculas, _ entre palabras</span></div>
+      <div class="row"><span class="ok">TASA_IVA</span><span class="why">siempre acompañado de <code style="font-family:'DM Mono',monospace;font-size:11px">final</code></span></div>
+    </div>
+    <div class="rc">
+      <div class="rc-title">Otras reglas críticas</div>
+      <div class="row"><span class="why">Java es sensible a mayúsculas: <code style="font-family:'DM Mono',monospace;font-size:11px">edad</code> ≠ <code style="font-family:'DM Mono',monospace;font-size:11px">Edad</code> ≠ <code style="font-family:'DM Mono',monospace;font-size:11px">EDAD</code></span></div>
+      <div class="row"><span class="why">Toda instrucción termina en <code style="font-family:'DM Mono',monospace;font-size:11px">;</code> — sin excepción</span></div>
+      <div class="row"><span class="why">Todo código vive dentro de una clase y un método</span></div>
+    </div>
+  </div>
+  <div class="footer-line"></div><div class="slide-num">03 / 11</div>
+</div>
+
+<!-- 04 -->
+<div class="slide s4" id="s4">
+  <div class="slabel">System.out — cómo hablarle al usuario</div>
+  <div class="out-grid">
+    <div class="oc">
+      <div class="oc-label">println · print · printf</div>
+      <pre><span class="cls">System</span>.out.<span class="fn">println</span>(<span class="str">"Hola"</span>);      <span class="cmt">// + salto</span>
+<span class="cls">System</span>.out.<span class="fn">print</span>(<span class="str">"Sin salto "</span>); <span class="cmt">// sin salto</span>
+<span class="cls">System</span>.out.<span class="fn">print</span>(<span class="str">"línea\n"</span>);
+<span class="cls">System</span>.out.<span class="fn">println</span>();             <span class="cmt">// línea vacía</span>
+
+<span class="cls">System</span>.out.<span class="fn">printf</span>(
+  <span class="str">"Hola, %s. Puntos: %d%n"</span>, nombre, pts
+);</pre>
+    </div>
+    <div class="oc">
+      <div class="oc-label">Secuencias de escape</div>
+      <pre><span class="str">"\n"</span>   <span class="cmt">→ salto de línea</span>
+<span class="str">"\t"</span>   <span class="cmt">→ tabulación</span>
+<span class="str">"\""</span>   <span class="cmt">→ comilla doble literal</span>
+<span class="str">"\\"</span>   <span class="cmt">→ barra invertida</span>
+<span class="str">"%n"</span>   <span class="cmt">→ salto en printf (portable)</span>
+<span class="str">"%%"</span>   <span class="cmt">→ signo % literal en printf</span></pre>
+    </div>
+  </div>
+  <div class="note"><strong>println vs. printf:</strong> <code style="font-family:'DM Mono',monospace;font-size:12px">println</code> imprime y agrega salto automáticamente. <code style="font-family:'DM Mono',monospace;font-size:12px">printf</code> formatea con especificadores y <strong>no</strong> agrega salto — hay que escribir <code style="font-family:'DM Mono',monospace;font-size:12px">%n</code> explícitamente.</div>
+  <div class="footer-line"></div><div class="slide-num">04 / 11</div>
+</div>
+
+<!-- 05 -->
+<div class="slide s5" id="s5">
+  <div class="slabel">Los 8 tipos primitivos de Java</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:75px">Tipo</th><th style="width:50px">Bits</th>
+        <th style="width:235px">Declaración</th><th>Nota</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="hi"><td class="td-type">int</td><td class="td-bits">32</td><td class="td-ex">int edad = 25;</td><td class="td-note">El más usado. Enteros del día a día.</td></tr>
+      <tr><td class="td-type">long</td><td class="td-bits">64</td><td class="td-ex">long dist = 9_460L;</td><td class="td-note">Requiere sufijo <code style="font-family:'DM Mono',monospace;font-size:11px">L</code>. Números muy grandes.</td></tr>
+      <tr class="hi"><td class="td-type">double</td><td class="td-bits">64</td><td class="td-ex">double pi = 3.14159;</td><td class="td-note">Decimales. Predeterminado para decimales en Java.</td></tr>
+      <tr><td class="td-type">float</td><td class="td-bits">32</td><td class="td-ex">float precio = 9.99f;</td><td class="td-note">Requiere sufijo <code style="font-family:'DM Mono',monospace;font-size:11px">f</code>. Menos preciso que double.</td></tr>
+      <tr class="hi"><td class="td-type">boolean</td><td class="td-bits">1</td><td class="td-ex">boolean activo = true;</td><td class="td-note">Solo <code style="font-family:'DM Mono',monospace;font-size:11px">true</code> o <code style="font-family:'DM Mono',monospace;font-size:11px">false</code>. Sin comillas.</td></tr>
+      <tr><td class="td-type">char</td><td class="td-bits">16</td><td class="td-ex">char inicial = 'A';</td><td class="td-note">Comillas simples. Un solo carácter Unicode.</td></tr>
+      <tr><td class="td-type">byte</td><td class="td-bits">8</td><td class="td-ex">byte nivel = 5;</td><td class="td-note">−128 a 127. Datos compactos.</td></tr>
+      <tr><td class="td-type">short</td><td class="td-bits">16</td><td class="td-ex">short año = 2026;</td><td class="td-note">−32,768 a 32,767. Poco usado hoy.</td></tr>
+    </tbody>
+  </table>
+  <div class="footer-line"></div><div class="slide-num">05 / 11</div>
+</div>
+
+<!-- 06 -->
+<div class="slide s6" id="s6">
+  <div class="slabel">String · Concatenación · String.format</div>
+  <div class="split">
+    <div class="cb">
+      <div class="cl">Concatenación con +</div>
+      <pre><span class="cls">String</span> nombre = <span class="str">"Ana"</span>;
+<span class="kw">int</span> puntos = <span class="num">950</span>;
+
+<span class="cls">System</span>.out.<span class="fn">println</span>(
+  <span class="str">"Jugador: "</span> + nombre +
+  <span class="str">" | Pts: "</span> + puntos
+);</pre>
+    </div>
+    <div class="cb">
+      <div class="cl">String.format — respuesta personalizada</div>
+      <pre><span class="cls">String</span> perfil = <span class="cls">String</span>.<span class="fn">format</span>(
+  <span class="str">"Jugador: %s | Pts: %d"</span>,
+  nombre, puntos
+);
+<span class="cls">System</span>.out.<span class="fn">println</span>(perfil);
+
+<span class="cls">System</span>.out.<span class="fn">printf</span>(
+  <span class="str">"Precio: $%.2f%n"</span>, <span class="num">9.99</span>
+);</pre>
+    </div>
+  </div>
+  <div class="spec-row">
+    <div class="spec"><div class="spec-sym">%s</div><div class="spec-desc">String</div></div>
+    <div class="spec"><div class="spec-sym">%d</div><div class="spec-desc">int / long</div></div>
+    <div class="spec"><div class="spec-sym">%f</div><div class="spec-desc">float / double</div></div>
+    <div class="spec"><div class="spec-sym">%.2f</div><div class="spec-desc">decimal 2 cifras</div></div>
+  </div>
+  <div class="footer-line"></div><div class="slide-num">06 / 11</div>
+</div>
+
+<!-- 07 -->
+<div class="slide s7" id="s7">
+  <div class="slabel">var · final · Tipos por referencia</div>
+  <div class="two-col">
+    <div class="cb">
+      <div class="cl var-l">var — inferencia de tipo (Java 10+)</div>
+      <pre><span class="kw" style="color:#3AABB4">var</span> ciudad = <span class="str">"Bogotá"</span>; <span class="cmt">// String</span>
+<span class="kw" style="color:#3AABB4">var</span> nivel  = <span class="num">5</span>;        <span class="cmt">// int</span>
+<span class="kw" style="color:#3AABB4">var</span> saldo  = <span class="num">1500.75</span>;  <span class="cmt">// double</span>
+
+<span class="cmt">// tipo fijo en compilación:</span>
+<span class="cmt">// ciudad = 99; ← NO compila</span></pre>
+    </div>
+    <div class="cb">
+      <div class="cl con-l" style="color:#C5A87D">final — constantes</div>
+      <pre><span class="kw">final double</span> IVA = <span class="num">0.19</span>;
+<span class="kw">final int</span> MAX_INTENTOS = <span class="num">3</span>;
+
+<span class="cmt">// IVA = 0.21; ← error:</span>
+<span class="cmt">// cannot assign to final variable</span>
+
+<span class="cls">System</span>.out.<span class="fn">printf</span>(
+  <span class="str">"IVA: %.0f%%%n"</span>, IVA * <span class="num">100</span>
+);</pre>
+    </div>
+  </div>
+  <div class="note"><strong>Tipos por referencia:</strong> Todo lo que no es primitivo — <code style="font-family:'DM Mono',monospace;font-size:12px">String</code>, colecciones, tus propias clases — es un tipo por referencia. La variable guarda una dirección a un objeto en memoria, no el valor directamente. Los verán en profundidad en OOP.</div>
+  <div class="footer-line"></div><div class="slide-num">07 / 11</div>
+</div>
+
+<!-- 08 -->
+<div class="slide s8" id="s8">
+  <div class="tag">Scanner · Leer input del usuario</div>
+  <h2>Importar, declarar, leer<br>— y no olvidar el buffer.</h2>
+  <div class="scan-grid">
+    <div class="sb">
+      <div class="sb-label">Uso básico</div>
+      <pre><span style="color:#7FBBDE">import</span> java.util.Scanner;
+
+<span style="color:#7FBBDE">Scanner</span> sc = <span style="color:#7FBBDE">new</span> Scanner(System.in);
+
+System.out.print(<span style="color:#F2A97C">"Tu nombre: "</span>);
+<span style="color:#7FBBDE">String</span> nombre = sc.nextLine();
+
+System.out.print(<span style="color:#F2A97C">"Tu edad: "</span>);
+<span style="color:#7FBBDE">int</span> edad = sc.nextInt();
+
+sc.close();</pre>
+    </div>
+    <div class="sb">
+      <div class="sb-label warn">⚠️ La trampa del buffer</div>
+      <div class="warn-box"><code>nextInt()</code> lee el número pero deja el <code>\n</code> en el buffer. El siguiente <code>nextLine()</code> captura ese <code>\n</code> vacío en lugar de esperar al usuario.</div>
+      <pre><span style="color:#A8D8A0">int</span> puntos = sc.nextInt();
+<span style="color:#E09040">sc.nextLine(); <span style="color:#4A6A70">// limpia el \n sobrante</span></span>
+<span style="color:#A8D8A0">String</span> ciudad = sc.nextLine(); <span style="color:#4A6A70">// ahora sí</span></pre>
+      <div class="warn-box" style="margin-top:8px;">Aplica después de <code>nextInt()</code>, <code>nextDouble()</code> y <code>nextFloat()</code> cuando le sigue un <code>nextLine()</code>.</div>
+    </div>
+  </div>
+  <div class="footer-line"></div><div class="slide-num">08 / 11</div>
+</div>
+
+<!-- 09 -->
+<div class="slide s9" id="s9">
+  <div class="tag">Actividad colectiva · Todos juntos · 10 min</div>
+  <h2>Escribimos juntos un programa<br>completo desde cero.</h2>
+  <div class="steps">
+    <div class="step"><div class="st">3 min</div><div class="stxt">Crear <code>VariablesDemo.java</code> en IntelliJ. Escribir la clase y el <code>main</code>. Declarar variables para nombre, edad, puntos y ciudad con los tipos correctos.</div></div>
+    <div class="step"><div class="st">2 min</div><div class="stxt">Imprimir un perfil formateado con <code>String.format</code> usando <code>%s</code> y <code>%d</code>. Ejecutar y verificar la salida.</div></div>
+    <div class="step"><div class="st">3 min</div><div class="stxt">Agregar <code>Scanner</code>: pedir nombre, puntos y ciudad al usuario. Escribir el <code>nextLine()</code> limpiador del buffer después del <code>nextInt()</code>.</div></div>
+    <div class="step"><div class="st">2 min</div><div class="stxt">Imprimir la respuesta personalizada con <code>String.format</code>. Ejecutar con datos reales y ver el resultado completo.</div></div>
+  </div>
+  <div class="footer-line"></div><div class="slide-num">09 / 11</div>
+</div>
+
+<!-- 10 -->
+<div class="slide s10" id="s10">
+  <div class="slabel">Cuestionario · Chat Box</div>
+  <div class="qb">
+    <div class="qn">Pregunta 01 · 1 min para pensar</div>
+    <div class="qt">¿Cuál es la declaración correcta para guardar el precio de un producto con decimales?</div>
+    <div class="opts">
+      <div class="opt">A) var precio = "9.99"</div>
+      <div class="opt ok">B) double precio = 9.99; ✓</div>
+      <div class="opt">C) int precio = 9.99;</div>
+      <div class="opt">D) float precio = 9.99;</div>
+    </div>
+  </div>
+  <div class="qb">
+    <div class="qn">Pregunta 02 · 1 min para pensar</div>
+    <div class="qt">¿Qué produce <code style="font-family:'DM Mono',monospace;font-size:12px">String.format("Hola, %s. Tienes %d pts.", "Ana", 100)</code>?</div>
+    <div class="opts">
+      <div class="opt">A) Hola, %s. Tienes %d pts.</div>
+      <div class="opt ok">B) Hola, Ana. Tienes 100 pts. ✓</div>
+      <div class="opt">C) Error de compilación</div>
+      <div class="opt">D) Hola, Ana. Tienes 100.0 pts.</div>
+    </div>
+  </div>
+  <div class="qb">
+    <div class="qn">Pregunta 03 · 1 min para pensar</div>
+    <div class="qt">¿Por qué se necesita <code style="font-family:'DM Mono',monospace;font-size:12px">scanner.nextLine()</code> después de <code style="font-family:'DM Mono',monospace;font-size:12px">nextInt()</code>?</div>
+    <div class="opts">
+      <div class="opt">A) Para cerrar el Scanner correctamente</div>
+      <div class="opt">B) Para releer el número ingresado</div>
+      <div class="opt ok">C) Para limpiar el \n que quedó en el buffer ✓</div>
+      <div class="opt">D) Es opcional, no cambia nada</div>
+    </div>
+  </div>
+  <div class="footer-line"></div><div class="slide-num">10 / 11</div>
+</div>
+
+<!-- 11 -->
+<div class="slide s11" id="s11">
+  <div class="tag">Cierre</div>
+  <h2>Ya escriben Java.<br>No lo leen —<br>lo <em>producen</em>.</h2>
+  <div class="sum">
+    <div class="si"><div class="sd"></div><div class="st">Aplican las <strong>reglas de escritura</strong> — camelCase, PascalCase, SCREAMING_SNAKE_CASE — y entienden por qué existen.</div></div>
+    <div class="si"><div class="sd"></div><div class="st">Declaran variables con los <strong>8 tipos primitivos</strong>, con <code style="font-family:'DM Mono',monospace;font-size:13px">String</code>, con <code style="font-family:'DM Mono',monospace;font-size:13px">var</code> y con <code style="font-family:'DM Mono',monospace;font-size:13px">final</code>.</div></div>
+    <div class="si"><div class="sd"></div><div class="st">Producen <strong>respuestas personalizadas</strong> con <code style="font-family:'DM Mono',monospace;font-size:13px">String.format</code> y <code style="font-family:'DM Mono',monospace;font-size:13px">printf</code>.</div></div>
+    <div class="si"><div class="sd"></div><div class="st">Leen input real con <strong>Scanner</strong> y saben manejar la trampa del buffer después de datos numéricos.</div></div>
+  </div>
+  <div class="puente">
+    <p>Pregunta puente → La próxima sesión veremos operadores y conversión de tipos. ¿Qué creen que pasa si suman un <code style="font-family:'DM Mono',monospace;font-size:12px">int</code> y un <code style="font-family:'DM Mono',monospace;font-size:12px">double</code> en Java — el resultado es int o double?</p>
+  </div>
+  <div class="footer-line"></div><div class="slide-num">11 / 11</div>
+</div>
+
+</body>
+</html>
