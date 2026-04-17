@@ -1,3 +1,5 @@
+package variablesYTiposDeDatos;
+
 import java.util.Scanner;
 
 public class Main {
