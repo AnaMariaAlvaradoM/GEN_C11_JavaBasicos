@@ -28,5 +28,8 @@ public class Vehiculo {
         this.velocidadMax = velocidadMax;
     }
 
+    public String describir(){
+        return "Marca:  " + getMarca() + " VelMax: " + getVelocidadMax();
+    }
 
 }

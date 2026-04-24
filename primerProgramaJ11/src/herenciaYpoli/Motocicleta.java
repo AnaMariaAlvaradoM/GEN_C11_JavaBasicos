@@ -16,4 +16,10 @@ public class Motocicleta extends Vehiculo{
     public void setCilindraje(int cilindraje) {
         this.cilindraje = cilindraje;
     }
+
+    @Override
+    public String describir(){
+        String base = super.describir();
+        return base + " Cilindrjae: " + getCilindraje();
+    }
 }
