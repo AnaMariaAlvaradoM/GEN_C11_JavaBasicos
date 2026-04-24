@@ -1,4 +1,4 @@
-package poo;
+package poo.ClaseHotel;
 
 public class Reserva {
     private String huesped;
@@ -53,4 +53,22 @@ public class Reserva {
     public void setHuesped(String huesped) {
         this.huesped = huesped;
     }
+
+    public static void imprimirReserva(Reserva reserva){
+        System.out.println("Cliente: " + reserva.getHuesped());
+        System.out.println("Precio por noche: $" + reserva.getPrecioPorNoche());
+        System.out.println("Num habitaciónes: " + reserva.getNumeroHabitaciones());
+    }
+
+
+    public void confirmar(){
+        if(this.precioPorNoche <= 0){
+            System.out.println("No se puede hacer proque no es valor valido");
+            return;
+        }
+        this.confirmada = true;
+        System.out.println("Reserva de: " + this.huesped);
+    }
+
+
 }
