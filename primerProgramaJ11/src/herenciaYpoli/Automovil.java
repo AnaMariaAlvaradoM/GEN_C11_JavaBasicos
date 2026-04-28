@@ -1,6 +1,6 @@
 package herenciaYpoli;
 
-public class Automovil extends Vehiculo{
+public class Automovil extends Vehiculo implements Asegurable, Lavable{
     private int numPuertas;
 
     public Automovil(String marca, int velocidadMax, int numPuertas) {
@@ -42,5 +42,25 @@ public class Automovil extends Vehiculo{
     public String describir() {
         String base = super.describir();
         return base + " | Puertas: " + numPuertas ;
+    }
+
+    @Override
+    public double calcularCostoKM(){
+        return 16000 / 12.5;
+    }
+
+    @Override
+    public double calcularSeguro() {
+        return 0;
+    }
+
+    @Override
+    public String obtenerNumPoliza() {
+        return "";
+    }
+
+    @Override
+    public String lavando() {
+        return "";
     }
 }

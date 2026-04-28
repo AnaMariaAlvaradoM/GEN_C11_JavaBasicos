@@ -1,6 +1,6 @@
 package herenciaYpoli;
 
-public class Vehiculo {
+public abstract class Vehiculo {
     private String marca;
     private int velocidadMax;
 
@@ -32,4 +32,11 @@ public class Vehiculo {
         return "Marca:  " + getMarca() + " VelMax: " + getVelocidadMax();
     }
 
+    public void encender(){
+        System.out.println(marca + "encendido");
+    }
+
+    public abstract double calcularCostoKM();
+
+//    public abstract  String asegurable();
 }

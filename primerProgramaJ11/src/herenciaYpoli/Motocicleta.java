@@ -22,4 +22,11 @@ public class Motocicleta extends Vehiculo{
         String base = super.describir();
         return base + " Cilindrjae: " + getCilindraje();
     }
+
+    @Override
+    public double calcularCostoKM() {
+        return 0;
+    }
+
+
 }
